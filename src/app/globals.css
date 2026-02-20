@@ -23,17 +23,24 @@
   padding: 0;
 }
 
-html, body {
+html,
+body {
   background-color: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
   overflow-x: hidden;
   overscroll-behavior: none;
-  scroll-behavior: initial; /* Lenis handles this */
+  scroll-behavior: initial;
+  /* Lenis handles this */
   -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-serif);
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -86,7 +93,8 @@ button {
   align-items: center;
   z-index: 100;
   mix-blend-mode: difference;
-  color: #fff; /* Always white due to blend mode on any bg */
+  color: #fff;
+  /* Always white due to blend mode on any bg */
 }
 
 .header-logo {
@@ -105,34 +113,13 @@ button {
   letter-spacing: 0.05em;
 }
 
-/* Hero Section */
+/* Hero Section HUD Layout */
 .hero {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  width: 100vw;
   position: relative;
-  padding: var(--spacing-xl) var(--spacing-md) 0;
-  z-index: 10;
-}
-
-.hero-title {
-  font-size: clamp(4rem, 10vw, 12rem);
-  line-height: 0.9;
-  text-transform: uppercase;
-  margin-bottom: var(--spacing-md);
-  mix-blend-mode: difference;
-  color: #fff;
-}
-
-.hero-subtitle {
-  font-size: 1.2rem;
-  max-width: 400px;
-  margin-bottom: var(--spacing-lg);
-  font-family: var(--font-sans);
-  font-weight: 300;
-  mix-blend-mode: difference;
-  color: #fff;
+  overflow: hidden;
+  background-color: #000;
 }
 
 /* 3D Canvas wrapper */
@@ -142,7 +129,117 @@ button {
   left: 0;
   width: 100%;
   height: 100vh;
-  z-index: 1;
+  z-index: 10;
+}
+
+/* Split Level Typography */
+.split-text-bg {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-serif);
+  font-size: clamp(6rem, 20vw, 24rem);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.split-text-fg {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 10vw, 12rem);
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 20;
+  mix-blend-mode: difference;
+}
+
+/* HUD System */
+.hud-element {
+  position: absolute;
+  z-index: 30;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.hud-bottom-left {
+  bottom: var(--spacing-md);
+  left: var(--spacing-md);
+  max-width: 350px;
+}
+
+.hud-bottom-right {
+  bottom: var(--spacing-md);
+  right: var(--spacing-md);
+  text-align: right;
+  display: flex;
+  align-items: flex-end;
+}
+
+.hud-middle-right {
+  top: 50%;
+  right: var(--spacing-md);
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: right;
+}
+
+.hud-desc {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 300;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.hud-mono {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.hud-data-item {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.hud-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  position: relative;
+}
+
+.hud-indicator::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background-color: #fff;
+  transition: width 0.3s ease;
+}
+
+.hud-indicator:hover::after {
+  width: 80px;
 }
 
 /* Features */
@@ -180,6 +277,125 @@ button {
 .spec-item {
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 0.5rem;
+}
+
+/* ==========================================================================
+   Responsive Queries Mobile & Tablet 
+   ========================================================================== */
+
+/* Tablet & Smaller Devices */
+@media (max-width: 1024px) {
+  .product-info {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+/* Mobile Devices */
+@media (max-width: 768px) {
+  :root {
+    --spacing-md: 1.5rem;
+    --spacing-xl: 4rem;
+  }
+
+  /* Header adjustments for mobile */
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: var(--spacing-md);
+  }
+
+  .nav-links {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 1rem;
+    font-size: 0.75rem;
+  }
+
+  /* Split Level Typography for Mobile */
+  .split-text-bg {
+    font-size: clamp(3.5rem, 18vw, 6rem);
+    top: 22%;
+  }
+
+  .split-text-fg {
+    font-size: clamp(2.5rem, 12vw, 4rem);
+    top: 68%;
+  }
+
+  /* HUD Layout restructuring for mobile */
+  .hud-bottom-left {
+    bottom: auto;
+    top: 100px;
+    /* Below the mobile header */
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .hud-desc {
+    font-size: 0.8rem;
+    max-width: 80%;
+  }
+
+  .hud-middle-right {
+    top: auto;
+    bottom: calc(var(--spacing-md) + 60px);
+    right: var(--spacing-md);
+    transform: none;
+    text-align: right;
+    align-items: flex-end;
+  }
+
+  .hud-data-item {
+    font-size: 0.65rem;
+  }
+
+  .hud-bottom-right {
+    bottom: var(--spacing-md);
+    left: var(--spacing-md);
+    right: var(--spacing-md);
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hud-indicator {
+    font-size: 0.75rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hud-indicator::after {
+    display: none;
+    /* Remove line on mobile to fit text cleanly */
+  }
+
+  /* Section adjustments */
+  .product-desc {
+    font-size: 1.25rem;
+  }
+
+  .section {
+    padding: var(--spacing-xl) 0;
+  }
+}
+
+/* Very small mobile devices */
+@media (max-width: 480px) {
+  .hud-desc {
+    display: none;
+    /* Hide paragraph on very small screens to keep UI clean */
+  }
+
+  .split-text-bg {
+    top: 25%;
+  }
+
+  .split-text-fg {
+    top: 65%;
+  }
 }
