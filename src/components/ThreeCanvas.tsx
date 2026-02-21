@@ -112,13 +112,16 @@ function FallbackGlassMaterial() {
   return (
     <meshPhysicalMaterial
       transparent
-      opacity={0.15}
+      transmission={0.9}
+      opacity={1}
       roughness={0.05}
-      metalness={0.1}
+      metalness={0}
+      ior={1.5}
+      thickness={1.5}
       clearcoat={1}
       clearcoatRoughness={0.1}
-      envMapIntensity={1.5}
-      color="#aaccff"
+      envMapIntensity={2}
+      color="#ffffff"
       side={THREE.DoubleSide}
     />
   );
@@ -231,13 +234,13 @@ const QuantumCore = memo(function QuantumCore({
             {useTransmission ? (
               <MeshTransmissionMaterial
                 backside
-                backsideThickness={0.5}
-                thickness={1}
-                chromaticAberration={0.03}
-                anisotropy={0.3}
-                distortion={0.1}
-                distortionScale={0.3}
-                temporalDistortion={0.05}
+                backsideThickness={1}
+                thickness={1.5}
+                chromaticAberration={0.05}
+                anisotropy={0.5}
+                distortion={0.2}
+                distortionScale={0.5}
+                temporalDistortion={0.1}
                 iridescence={1}
                 iridescenceIOR={1}
                 iridescenceThicknessRange={[0, 1400]}
@@ -245,9 +248,9 @@ const QuantumCore = memo(function QuantumCore({
                 roughness={0}
                 clearcoat={1}
                 clearcoatRoughness={0.1}
-                // ⚡ KEY PERF: FBO resolution & sample count
-                samples={4}
-                resolution={256}
+                // ⚡ PERF: lower FBO res & samples (orig was default ~1024/16)
+                samples={6}
+                resolution={512}
               />
             ) : (
               <FallbackGlassMaterial />

@@ -21,21 +21,21 @@ const TIER_CONFIGS: Record<PerformanceTier, Omit<DevicePerformance, "tier">> = {
   low: {
     isMobile: true,
     dpr: [1, 1],
-    particleCount: 40,
-    starCount: 0, // Stars completely off
-    useTransmission: false, // MeshPhysicalMaterial fallback
+    particleCount: 60,
+    starCount: 200,
+    useTransmission: false, // MeshPhysicalMaterial fallback (with transmission prop)
     shadowResolution: 0, // ContactShadows off
-    geometryDetail: 2,
+    geometryDetail: 3,
     antialias: false,
   },
   medium: {
     isMobile: true,
     dpr: [1, 1.5],
-    particleCount: 80,
-    starCount: 200,
-    useTransmission: false, // Transmission still too expensive for mid-range mobile
+    particleCount: 120,
+    starCount: 500,
+    useTransmission: true, // Use transmission — with lower samples/res it's fine
     shadowResolution: 256,
-    geometryDetail: 3,
+    geometryDetail: 4,
     antialias: false,
   },
   high: {
@@ -44,7 +44,7 @@ const TIER_CONFIGS: Record<PerformanceTier, Omit<DevicePerformance, "tier">> = {
     particleCount: 200,
     starCount: 1000,
     useTransmission: true,
-    shadowResolution: 512,
+    shadowResolution: 1024,
     geometryDetail: 4,
     antialias: true,
   },
@@ -87,12 +87,15 @@ function detectTier(): PerformanceTier {
   // Known low-end GPU keywords (Adreno 3xx/4xx/5xx, Mali-4xx/T6xx, PowerVR SGX)
   const isWeakGPU = /Adreno\s*[345]\d{2}|Mali-[4T][0-6]|PowerVR\s*SGX|SwiftShader/i.test(renderer);
 
-  if (isMobile && (cores <= 4 || memory <= 3 || isWeakGPU || maxTexture <= 4096)) {
+  // Only truly weak mobile devices go to low tier
+  if (isMobile && (cores <= 2 || memory <= 2 || isWeakGPU)) {
     return "low";
   }
-  if (isMobile || cores <= 4 || memory <= 4) {
+  // Other mobile devices get medium
+  if (isMobile) {
     return "medium";
   }
+  // Desktop/laptop always gets high — even modest ones handle transmission fine
   return "high";
 }
 
