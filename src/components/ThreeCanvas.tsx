@@ -109,19 +109,20 @@ const Particles = memo(function Particles({ count }: ParticlesProps) {
 // Looks ~80% as good, costs ~10% GPU compared to MeshTransmissionMaterial
 // ──────────────────────────────────────────────────────────────────────────────
 function FallbackGlassMaterial() {
+  // No `transmission` prop — that triggers an internal FBO pass in Three.js
+  // which is nearly as expensive as MeshTransmissionMaterial.
+  // Pure opacity + high envMap reflection = decent glass look at ~0 GPU cost.
   return (
     <meshPhysicalMaterial
       transparent
-      transmission={0.9}
-      opacity={1}
+      opacity={0.25}
       roughness={0.05}
-      metalness={0}
-      ior={1.5}
-      thickness={1.5}
+      metalness={0.2}
       clearcoat={1}
-      clearcoatRoughness={0.1}
-      envMapIntensity={2}
-      color="#ffffff"
+      clearcoatRoughness={0.05}
+      envMapIntensity={3}
+      reflectivity={1}
+      color="#aaccff"
       side={THREE.DoubleSide}
     />
   );
@@ -325,9 +326,11 @@ export default function ThreeCanvas() {
             useTransmission={perf.useTransmission}
             geometryDetail={perf.geometryDetail}
           />
-          <Environment preset="city" />
+          {/* HDR cubemap — skip on low tier to save GPU texture sampling */}
+          {perf.tier !== "low" && <Environment preset="city" />}
           {perf.shadowResolution > 0 && (
             <ContactShadows
+              position={[0, -3, 0]}
               resolution={perf.shadowResolution}
               scale={20}
               blur={2}

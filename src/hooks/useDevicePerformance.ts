@@ -21,21 +21,21 @@ const TIER_CONFIGS: Record<PerformanceTier, Omit<DevicePerformance, "tier">> = {
   low: {
     isMobile: true,
     dpr: [1, 1],
-    particleCount: 60,
-    starCount: 200,
-    useTransmission: false, // MeshPhysicalMaterial fallback (with transmission prop)
-    shadowResolution: 0, // ContactShadows off
-    geometryDetail: 3,
+    particleCount: 30, // Minimal particles
+    starCount: 0, // Stars OFF — each star is a vertex, saves draw calls
+    useTransmission: false, // Opacity-only fallback, zero FBO passes
+    shadowResolution: 0, // ContactShadows OFF — saves 1 FBO pass
+    geometryDetail: 2, // Low-poly outer shell
     antialias: false,
   },
   medium: {
     isMobile: true,
     dpr: [1, 1.5],
-    particleCount: 120,
-    starCount: 500,
-    useTransmission: true, // Use transmission — with lower samples/res it's fine
-    shadowResolution: 256,
-    geometryDetail: 4,
+    particleCount: 60, // Moderate particles
+    starCount: 200,
+    useTransmission: false, // NO transmission — FBO passes kill mobile GPUs
+    shadowResolution: 0, // ContactShadows OFF on mobile too
+    geometryDetail: 3,
     antialias: false,
   },
   high: {
