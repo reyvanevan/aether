@@ -120,9 +120,11 @@ button {
   position: relative;
   overflow: hidden;
   background-color: #000;
+  touch-action: pan-y; /* Allows vertical scroll, prevents WebGL interference */
+  contain: layout style; /* Isolates hero reflows from rest of page */
 }
 
-/* 3D Canvas wrapper */
+/* 3D Canvas wrapper — GPU compositing layer */
 .canvas-wrapper {
   position: absolute;
   top: 0;
@@ -130,6 +132,8 @@ button {
   width: 100%;
   height: 100vh;
   z-index: 10;
+  will-change: transform; /* Promotes to own compositing layer */
+  contain: strict; /* Isolates layout/paint from rest of DOM */
 }
 
 /* Split Level Typography */

@@ -1,8 +1,22 @@
 "use client";
 
-import ThreeCanvas from "@/components/ThreeCanvas";
 import { useUIStore } from "@/store/useUIStore";
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+
+// ⚡ Dynamic import with ssr:false — code-splits the entire Three.js/R3F bundle
+// into a separate chunk. This alone cuts ~400-600KB from the initial JS payload,
+// so the page shell + HUD renders INSTANTLY while the 3D scene loads async.
+const ThreeCanvas = dynamic(() => import("@/components/ThreeCanvas"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="canvas-wrapper"
+      style={{ background: "#000" }}
+      aria-label="Loading 3D scene…"
+    />
+  ),
+});
 
 export default function Home() {
   const setHoveringButton = useUIStore((state) => state.setHoveringButton);
