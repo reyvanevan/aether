@@ -111,19 +111,22 @@ const Particles = memo(function Particles({ count }: ParticlesProps) {
 function FallbackGlassMaterial() {
   // No `transmission` prop — that triggers an internal FBO pass in Three.js
   // which is nearly as expensive as MeshTransmissionMaterial.
-  // Pure opacity + high envMap reflection = decent glass look at ~0 GPU cost.
+  // Higher opacity + clearcoat + envMap = visible glass shell, zero FBO cost.
   return (
     <meshPhysicalMaterial
       transparent
-      opacity={0.25}
-      roughness={0.05}
-      metalness={0.2}
+      opacity={0.55}
+      roughness={0.02}
+      metalness={0.05}
       clearcoat={1}
-      clearcoatRoughness={0.05}
-      envMapIntensity={3}
+      clearcoatRoughness={0.03}
+      envMapIntensity={4}
       reflectivity={1}
-      color="#aaccff"
+      color="#b8d4ff"
+      emissive="#112244"
+      emissiveIntensity={0.15}
       side={THREE.DoubleSide}
+      depthWrite={false}
     />
   );
 }
